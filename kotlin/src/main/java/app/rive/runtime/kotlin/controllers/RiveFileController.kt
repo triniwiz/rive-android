@@ -1055,6 +1055,9 @@ class RiveFileController internal constructor(
      */
     @Throws(IllegalStateException::class)
     override fun release(): Int {
+        if (refs.get() == 0) {
+            return 0
+        }
         val count = super.release()
         require(count >= 0)
 

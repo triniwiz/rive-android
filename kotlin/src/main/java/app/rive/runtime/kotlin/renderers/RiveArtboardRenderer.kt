@@ -60,7 +60,18 @@ open class RiveArtboardRenderer(
             // Early out for deleted renderer or inactive controller.
             if (!hasCppObject || !controller.isActive) return
 
-            controller.activeArtboard?.draw(cppPointer, fit, alignment, scaleFactor = scaleFactor)
+            synchronized(controller.file?.lock ?: this) {
+                if (!controller.isActive) return
+                if (controller.requireArtboardResize.getAndSet(false)) {
+                    resizeArtboard()
+                }
+                controller.activeArtboard?.draw(
+                    cppPointer,
+                    fit,
+                    alignment,
+                    scaleFactor = scaleFactor
+                )
+            }
         }
     }
 

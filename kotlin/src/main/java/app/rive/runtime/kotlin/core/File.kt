@@ -1,5 +1,6 @@
 package app.rive.runtime.kotlin.core
 
+import android.util.Log
 import androidx.annotation.OpenForTesting
 import androidx.annotation.VisibleForTesting
 import app.rive.runtime.kotlin.core.errors.ArtboardException
@@ -238,7 +239,12 @@ class File(
 
     override fun release(): Int {
         // `super.release()` is already @Synchronized, but wrap this in its own lock.
-        synchronized(lock) { return super.release() }
+        synchronized(lock) {
+            if (refCount == 0) {
+                return 0
+            }
+            return super.release()
+        }
     }
 
     /** The name and values of an enum, whether system or user defined. */

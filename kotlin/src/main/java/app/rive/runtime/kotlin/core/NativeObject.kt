@@ -1,5 +1,6 @@
 package app.rive.runtime.kotlin.core
 
+import android.util.Log
 import app.rive.runtime.kotlin.core.NativeObject.Companion.NULL_POINTER
 import app.rive.runtime.kotlin.core.errors.RiveException
 import java.util.Collections
@@ -118,6 +119,10 @@ abstract class NativeObject(initialPointer: Long) : RefCount {
     @Throws(IllegalArgumentException::class)
     @Synchronized
     override fun release(): Int {
+        if (refs.get() == 0 && !hasCppObject){
+            return 0
+        }
+
         val count = super.release()
         require(count >= 0) // Never release a disposed object.
 
@@ -138,6 +143,9 @@ abstract class NativeObject(initialPointer: Long) : RefCount {
     @Throws(IllegalArgumentException::class)
     @Synchronized
     private fun dispose() {
+        if (refs.get() < 0){
+            return
+        }
         require(refs.get() == 0)
 
         disposeStackTrace =

@@ -1,0 +1,5 @@
+jdk:
+  - openjdk8
+before_install:
+  - yes | sdkmanager "cmake;3.22.1"
+  - yes | sdkmanager "ndk;27.2.12479018"
