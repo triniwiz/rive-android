@@ -1,9 +1,17 @@
 jdk:
-  - openjdk11
+  - openjdk17
 
 before_install:
   - export CC=gcc
   - export CXX=g++
+
+  - export RIVE_PREMAKE_TAG="v5.0.0-beta7"
+  - curl -L https://github.com/premake/premake-core/releases/download/${RIVE_PREMAKE_TAG}/premake-5.0.0-beta7-linux.tar.gz -o premake.tar.gz
+  - tar -xzf premake.tar.gz
+  - chmod +x premake5
+  - mkdir -p submodules/rive-runtime/build/dependencies/premake-core/bin/${RIVE_PREMAKE_TAG}_release
+  - cp premake5 submodules/rive-runtime/build/dependencies/premake-core/bin/${RIVE_PREMAKE_TAG}_release/premake5 || true
+  - chmod +x submodules/rive-runtime/build/dependencies/premake-core/bin/${RIVE_PREMAKE_TAG}_release/premake5 || true
 
   - yes | sdkmanager "cmake;3.18.1"
   - yes | sdkmanager "ndk;27.2.12479018"
