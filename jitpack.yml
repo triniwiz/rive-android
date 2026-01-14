@@ -2,7 +2,6 @@ jdk:
   - openjdk11
 
 before_install:
-  # Force host compiler (CRITICAL)
   - export CC=gcc
   - export CXX=g++
 
